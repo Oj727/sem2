@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SEM予約スケジュール</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 5px;
+        text-align: center;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+      td.available {
+        background-color: #e0ffe0;
+      }
+      td.reserved {
+        background-color: #ffe0e0;
+      }
+      #weekControls {
+        margin: 10px 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 style="font-size: 36px;">SEM予約スケジュール</h2>
+    <div id="weekControls">
+      <button onclick="changeWeek(-7)">← 前の週</button>
+      <button onclick="changeWeek(7)">次の週 →</button>
+    </div>
+    <div id="tableContainer">読み込み中...</div>
+
+    <script>
+      let currentWeekOffset = 0;
+
+      async function fetchScheduleData(offset) {
+        const url = `https://script.google.com/macros/s/AKfycbzIqVD3tpTWfwvDwY-4QFBXP5Rqd_V1dXv2jvrX5ofUSLANPQ-zYjii3qbqN3bM9WQ9TA/exec`;
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          drawTable(data);
+        } catch (error) {
+          document.getElementById("tableContainer").textContent = "データの読み込みに失敗しました。";
+          console.error("Error fetching data:", error);
+        }
+      }
+
+      function drawTable(data) {
+        const { dates, times, schedule } = data;
+
+        const table = document.createElement("table");
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        headerRow.appendChild(document.createElement("th"));
+        dates.forEach(date => {
+          const th = document.createElement("th");
+          th.textContent = date;
+          headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+
+        schedule.forEach((row, rowIndex) => {
+          const tr = document.createElement("tr");
+          row.forEach((cell, colIndex) => {
+            const tag = colIndex === 0 ? "th" : "td";
+            const cellElem = document.createElement(tag);
+            cellElem.textContent = cell;
+
+            if (colIndex > 0) {
+              cellElem.classList.add(cell === "⚪︎" ? "available" : "reserved");
+            }
+
+            tr.appendChild(cellElem);
+          });
+          tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        document.getElementById("tableContainer").innerHTML = "";
+        document.getElementById("tableContainer").appendChild(table);
+      }
+
+      function changeWeek(offset) {
+        currentWeekOffset = Math.max(0, currentWeekOffset + offset);
+        fetchScheduleData(currentWeekOffset);
+      }
+
+      fetchScheduleData(currentWeekOffset);
+    </script>
+  </body>
+</html>
