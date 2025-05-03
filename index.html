@@ -40,7 +40,7 @@
       let currentWeekOffset = 0;
 
       async function fetchScheduleData(offset) {
-        const url = `https://script.google.com/macros/s/AKfycbzIqVD3tpTWfwvDwY-4QFBXP5Rqd_V1dXv2jvrX5ofUSLANPQ-zYjii3qbqN3bM9WQ9TA/exec`;
+        const url = `https://script.google.com/macros/s/AKfycbzIqVD3tpTWfwvDwY-4QFBXP5Rqd_V1dXv2jvrX5ofUSLANPQ-zYjii3qbqN3bM9WQ9TA/exec?offset=${offset}`;
         try {
           const response = await fetch(url);
           const data = await response.json();
