@@ -46,7 +46,7 @@
           const data = await response.json();
           drawTable(data);
         } catch (error) {
-          document.getElementById("tableContainer").textContent = "データの読み込みに失敗しました。";
+          document.getElementById("tableContainer").textContent = "データの読み込みに失敗しました!!";
           console.error("Error fetching data:", error);
         }
       }
