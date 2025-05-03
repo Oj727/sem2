@@ -42,16 +42,21 @@
       let offset = 0;
 
       async function fetchScheduleData(offset) {
-        const url = `https://script.google.com/macros/s/AKfycbyyDSF8VGsRdXHa-zAE3BaSMsEzGF6npwg3BUxftoase2bPKFUe0DiqwxmLpbiJWPIU-Q/exec`;
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          drawTable(data);
-        } catch (error) {
-          document.getElementById("tableContainer").textContent = "データの読み込みに失敗しました!"+response;
-          console.error("Error fetching data:", error);
+    const url = `https://script.google.com/macros/s/AKfycbyyDSF8VGsRdXHa-zAE3BaSMsEzGF6npwg3BUxftoase2bPKFUe0DiqwxmLpbiJWPIU-Q/exec`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
+        const data = await response.json();
+        drawTable(data);
+    } catch (error) {
+        const errorMessage = `データの読み込みに失敗しました! エラー詳細: ${error.message}`;
+        document.getElementById("tableContainer").textContent = errorMessage;
+        console.error("Error fetching data:", error);
+    }
+}
+
 
       function drawTable(data) {
         const { dates, times, schedule } = data;
