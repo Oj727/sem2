@@ -42,7 +42,7 @@
       let offset = 0;
 
       async function fetchScheduleData(offset) {
-    const url = `https://script.google.com/macros/s/AKfycbzMRQPNgHDJVSv28naKlI6llASFzTsKPZunZdTOvW2p6zwuDWaQ_sPwaOlL12FPhuEM/exec`;
+    const url = `https://script.google.com/macros/s/AKfycbzMRQPNgHDJVSv28naKlI6llASFzTsKPZunZdTOvW2p6zwuDWaQ_sPwaOlL12FPhuEM/exec?offset=${offset}`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
